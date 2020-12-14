@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="12 hours">
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+    <!--应用名称-->
+    <property name="APP_NAME" value="myproject"/>
+    <property name="SQL_LOG" value="sqlLog"/>
+
+    <!--日志文件的保存路径,首先查找系统属性-Dlog.dir,如果存在就使用其；否则，在当前目录下创建名为logs目录做日志存放的目录 -->
+    <property name="LOG_HOME" value="${catalina.home}/logs}"/>
+    <!--<property name="BACK_HOME" value="../logs/log_backup}"/>-->
+    <!-- 日志输出格式 -->
+    <property name="ENCODER_PATTERN" value="%d{yyyy-MM-dd  HH:mm:ss.SSS} [%thread] %-5level %logger{80} - %msg%n"/>
+    <contextName>${APP_NAME}</contextName>
+
+    <!-- 控制台日志：输出全部日志到控制台 -->　　　
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--定义了一个过滤器,在LEVEL之下的日志输出不会被打印出来-->
+        <!--这里定义了DEBUG，也就是控制台不会输出比ERROR级别小的日志-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="SQL_LOG_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${SQL_LOG}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>200MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!--log4jdbc -->
+    <!--In a typical usage scenario, you might turn on only the jdbc.sqlonly logging at INFO level, just to view the SQL coming out of your program.-->
+    <logger name="jdbc.sqlonly" level="DEBUG">
+        <appender-ref ref="SQL_LOG_FILE"/>
+    </logger>
+    <logger name="jdbc.sqltiming" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.connection" level="OFF"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    　　　
+    <!-- 日志输出级别 -->
+    <root level ="DEBUG">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
