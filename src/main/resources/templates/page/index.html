@@ -5,18 +5,37 @@
     <title>首頁</title>
     <link rel="stylesheet" type="text/css"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        html.body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
-<div id="index" class="container">
-    <div class="row">
-        <label for="secretKey">您的密鑰</label>
-        <input class="input" type="text" id="secretKey" th:value="${secretKey}" disabled />
+<div id="index" class="container-fluid" style="height: 100%">
+    <header-component th:username="${username}"></header-component>
+    <div class="row" style="height: 100%">
+        <div class="col col-sm-2" style="border-right: #12000a solid 1px;">
+            test
+            adafdsaf
+        </div>
+        <div class="col col-sm-10">
+            <div class="row">
+                <label for="secretKey">您的密鑰</label>
+                <input class="input" type="text" id="secretKey" th:value="${secretKey}" disabled />
+            </div>
+            <div class="row">
+                <label>您的二維碼</label>
+                <img th:src="'data:image/png;base64,' + ${qrcodeBase64Str}">
+            </div>
+        </div>
+        <div class="row" style="border-top: #12000a solid 1px; width: 100%"> this is footer</div>
     </div>
-    <div class="row">
-        <label>您的二維碼</label>
-        <img th:src="'data:image/png;base64,' + ${qrcodeBase64Str}">
-    </div>
+
 </div>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript" th:src="@{/js/index.js}"></script>
